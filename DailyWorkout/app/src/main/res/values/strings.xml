@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Daily Workout</string>
+    <string name="txtTitle">Please Enter a Workout</string>
+    <string name="editTxtActivity">Activity Type</string>
+    <string name="editTxtMiles">Number of Miles</string>
+    <string name="editTxtDate">Date of Activity</string>
+    <string name="btnAddActivity">Add Activity</string>
+    <string name="txtTitleActivities">Entered Activities</string>
+
+    <string name="txtColumnActivity">Activity</string>
+    <string name="txtColumnMiles">Miles</string>
+    <string name="txtColumnDate">Date</string>
+</resources>
