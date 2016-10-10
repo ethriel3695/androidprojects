@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Weather Forecast</string>
+
+    <string-array name="cities">
+        <item>Select a city for forecast results</item>
+        <item>Idaho Falls</item>
+        <item>Miami</item>
+        <item>Anchorage</item>
+        <item>Honolulu</item>
+    </string-array>
+</resources>
