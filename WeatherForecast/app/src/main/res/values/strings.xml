@@ -8,4 +8,6 @@
         <item>Anchorage</item>
         <item>Honolulu</item>
     </string-array>
+
+    <string name="imageIconURL">Weather Condition Description</string>
 </resources>

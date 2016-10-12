@@ -1,8 +1,11 @@
 package com.elllistech.weatherforecast;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,7 +45,7 @@ public class WeatherAPI {
 
             weatherStream.close();
             conn.disconnect();
-            Log.d(weatherBuffer.toString(), "getWeatherForecastData: ");
+            //Log.d(weatherBuffer.toString(), "getWeatherForecastData: ");
 
             return weatherBuffer.toString();
 
@@ -57,5 +60,24 @@ public class WeatherAPI {
         }
 
         return null;
+    }
+
+    public Bitmap getImage(String code) {
+        HttpURLConnection con = null ;
+        InputStream is = null;
+        try {
+            URL urlConnection = new URL(code);
+            HttpURLConnection connection = (HttpURLConnection) urlConnection
+                    .openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+
     }
 }

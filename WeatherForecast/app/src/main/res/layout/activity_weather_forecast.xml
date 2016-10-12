@@ -18,4 +18,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/spinnerCities" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_height="480dp"
+        android:id="@+id/defaultLayout">
+
+    </RelativeLayout>
 </RelativeLayout>

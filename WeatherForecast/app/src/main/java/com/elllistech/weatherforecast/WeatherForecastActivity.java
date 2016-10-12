@@ -3,6 +3,7 @@ package com.elllistech.weatherforecast;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.net.Uri;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +22,8 @@ import com.elllistech.weatherforecast.WeatherAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class WeatherForecastActivity extends AppCompatActivity {
+public class WeatherForecastActivity extends AppCompatActivity
+    implements WeatherForecastFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,19 +33,15 @@ public class WeatherForecastActivity extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        String
-                data = "";
-        JSONObject
-                weatherJSONObject = null;
-        try {
-            weatherJSONObject = new JSONObject(data);
-
-            String
-                    temperature = weatherJSONObject.getString("temp_f");
-
-        } catch (JSONException e1) {
-            e1.printStackTrace();
-        }
+        final WeatherForecastFragment
+                fragment = new WeatherForecastFragment();
+        FragmentManager
+                fragmentManager = getSupportFragmentManager();
+        FragmentTransaction
+                fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.defaultLayout, fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
         final Context
                 context = this;
@@ -86,15 +84,73 @@ public class WeatherForecastActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView,
                                        int position, long id) {
                 String
-                        currentCity = citiesSpinner.getSelectedItem().toString();
+                        currentCity = citiesSpinner.getSelectedItem().toString(),
+                        temperature = "",
+                        weatherCondition = "",
+                        relativeHumidity = "",
+                        windDir = "",
+                        windMPH = "",
+                        feelslike_f = "",
+                        pressureIn = "",
+                        precipTodayIn = "",
+                        visibilityMI = "",
+                        iconURL = "";
 
                 if (!currentCity.equals("Select a city for forecast results"))
                 {
                     WeatherAPI
                             weatherData = new WeatherAPI();
-                    weatherData.getWeatherForecastData("ID", "/Idaho_Falls.json");
+
+                    String
+                        data = weatherData.getWeatherForecastData("ID", "/Idaho_Falls.json");
 //                Toast.makeText(context, "Hello!",
 //                        Toast.LENGTH_LONG).show();
+
+//                    JSONObject
+//                            weatherJSONObject = null;
+                    try {
+                        JSONObject
+                            weatherJSONObject = new JSONObject(data),
+                            currentObservation = weatherJSONObject.
+                                    getJSONObject("current_observation");
+
+                        temperature = currentObservation.getString("temp_f");
+                        weatherCondition = currentObservation.getString("weather");
+                        relativeHumidity = currentObservation.getString("relative_humidity");
+                        windDir = currentObservation.getString("wind_dir");
+                        windMPH = currentObservation.getString("wind_mph");
+                        feelslike_f = currentObservation.getString("feelslike_f");
+                        pressureIn = currentObservation.getString("pressure_in");
+                        precipTodayIn = currentObservation.getString("precip_today_in");
+                        visibilityMI = currentObservation.getString("visibility_mi");
+                        iconURL = currentObservation.getString("icon_url");
+
+                    } catch (JSONException e1) {
+                        e1.printStackTrace();
+                    }
+
+                    SharedPreferences.Editor
+                            activityDisplay = savedActivities.edit();
+                    activityDisplay.putString("currentCity", currentCity);
+                    activityDisplay.putString("temperature", temperature);
+                    activityDisplay.putString("weatherCondition", weatherCondition);
+                    activityDisplay.putString("relativeHumidity", relativeHumidity);
+                    activityDisplay.putString("windDir", windDir);
+                    activityDisplay.putString("windMPH", windMPH);
+                    activityDisplay.putString("feelslike_f", feelslike_f);
+                    activityDisplay.putString("pressureIn", pressureIn);
+                    activityDisplay.putString("precipTodayIn", precipTodayIn);
+                    activityDisplay.putString("visibilityMI", visibilityMI);
+                    activityDisplay.putString("iconURL", iconURL);
+                    activityDisplay.commit();
+
+                    FragmentManager
+                            fragmentManager = getSupportFragmentManager();
+                    FragmentTransaction
+                            fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.detach(fragment);
+                    fragmentTransaction.attach(fragment);
+                    fragmentTransaction.commit();
                 }
             }
 
@@ -103,6 +159,11 @@ public class WeatherForecastActivity extends AppCompatActivity {
                 return;
             }
         });
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
 //    public void fragmentInitialization(Spinner east, Spinner west,
