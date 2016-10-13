@@ -101,10 +101,8 @@ public class WeatherAPI {
     public Bitmap getWeatherIcon(String icon) {
 
         try {
-            URL
-                    iconConnection = new URL(icon);
             HttpURLConnection
-                    weatherIconConnection = (HttpURLConnection) iconConnection.openConnection();
+                weatherIconConnection = (HttpURLConnection)(new URL(icon)).openConnection();
             weatherIconConnection.setDoInput(true);
             weatherIconConnection.connect();
             InputStream
